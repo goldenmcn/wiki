@@ -1,0 +1,33 @@
+name: Test deployment
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Test deployment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: current
+          cache: pnpm
+
+      - name: Get pnpm cache
+        id: pnpm-cache
+        run: echo "PNPM_CACHE_DIR=$(pnpm store path)" >> "${GITHUB_OUTPUT}"
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.PNPM_CACHE_DIR }}
+          key: ${{ runner.os }}-website-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-website-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build website
+        run: pnpm build
