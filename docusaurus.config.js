@@ -61,7 +61,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/zoloto-social-card.jpg',
+      image: 'img/zoloto-social-card.png',
       navbar: {
         title: 'Zoloto Wiki',
         logo: {
